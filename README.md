@@ -21,4 +21,4 @@ Ce projet permet de consolider des fichiers CSV, rechercher des produits, géné
  - Consolidation: `python main.py merge --input-dir <répertoire-des-fichiers-csv> --output-file <fichier-consolide.csv>`
  - Recherche: `python main.py search --product-name "Produit A" --category "Catégorie 1" --price-max 20`
  - Gestion des rapports: `python main.py report --input-file <fichier-consolide.csv> --output-file <rapport.pdf>`
- - 
+   
