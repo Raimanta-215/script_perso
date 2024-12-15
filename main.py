@@ -17,11 +17,11 @@ def main():
 
     # Commande de recherche
     search_parser = subparsers.add_parser("search", help="Rechercher des produits dans les stocks")
+    search_parser.add_argument("--file", required=True, help="Fichier CSV consolidé")
     search_parser.add_argument("--product-name", help="Nom du produit")
     search_parser.add_argument("--category", help="Catégorie du produit")
     search_parser.add_argument("--price-min", type=float, help="Prix minimum")
     search_parser.add_argument("--price-max", type=float, help="Prix maximum")
-
     # Commande de rapport
     report_parser = subparsers.add_parser("report", help="Générer un rapport récapitulatif")
     report_parser.add_argument("--input-file", required=True, help="Fichier CSV consolidé")
@@ -32,7 +32,7 @@ def main():
     if args.command == "merge":
         consolidate_csv(args.input_dir, args.output_file)
     elif args.command == "search":
-        search_products(args)
+        search_products(args, args.file)
     elif args.command == "report":
         generate_report(args.input_file, args.output_file)
     else:

@@ -6,9 +6,12 @@ def consolidate_csv(input_dir, output_file):
     """
     Consolide plusieurs fichiers CSV depuis un répertoire dans un fichier unique.
 
-    Args:
-        input_dir (str): Dossier contenant les fichiers CSV.
+    PRE : input_dir (str): Dossier contenant les fichiers CSV.
         output_file (str): Chemin du fichier CSV de sortie.
+
+    POST : - Crée un fichier CSV qui combine tous les fichiers CSV en entrée
+
+
     """
     try:
         all_files = [

@@ -1,15 +1,21 @@
 import pandas as pd
 
 
-def search_products(args):
+def search_products(args, file):
     """
     Recherche des produits dans un fichier CSV consolidé.
 
-    Args:
-        args: Arguments passés par la ligne de commande.
+    PRE : -args (str) : Arguments passés par la ligne de commande.
+           - file (str) : Chemin du fichier CSV
+
+    POST : Affiche en console les produits recherchés
+
+    RAISES : FileNotFoundError si le fichier n'existe pas
+
+
     """
     try:
-        df = pd.read_csv("test_data/file1.csv")  # Chemin par défaut
+        df = pd.read_csv(file)
         filters = []
 
         if args.product_name:
@@ -29,6 +35,6 @@ def search_products(args):
         else:
             print("Aucun filtre spécifié, veuillez ajouter des critères de recherche.")
     except FileNotFoundError:
-        print("Le fichier consolidé 'consolidated.csv' est introuvable. Veuillez le générer d'abord.")
+        print(f"Le fichier consolidé {file} est introuvable. Veuillez le générer d'abord.")
     except Exception as e:
         print(f"Erreur lors de la recherche : {e}")

@@ -1,6 +1,7 @@
 import unittest
 import os
 import pandas as pd
+import pdfplumber
 from utils.csv_handler import consolidate_csv
 from utils.report_file import generate_report
 
@@ -68,7 +69,7 @@ class TestSearch(unittest.TestCase):
         self.assertEqual(len(result), 2)
 
     def test_search_by_price_range(self):
-        # Test recherche par plage de prix
+        # Test réchérché par plage de prix
         args = type('', (), {})()  # Simule les arguments
         args.product_name = None
         args.category = None
@@ -83,7 +84,7 @@ class TestReport(unittest.TestCase):
     def setUp(self):
         # Préparation d'un fichier consolidé pour les tests
         self.input_file = "test_consolidated.csv"
-        self.output_file = "test_report.txt"
+        self.output_file = "test_report.pdf"
         pd.DataFrame({
             "nom_produit": ["Produit A", "Produit B", "Produit C"],
             "quantite": [10, 5, 8],
@@ -99,14 +100,17 @@ class TestReport(unittest.TestCase):
             os.remove(self.output_file)
 
     def test_generate_report(self):
-        # Test de génération de rapport
+        # Test de génération de rapport PDF
         generate_report(self.input_file, self.output_file)
         self.assertTrue(os.path.exists(self.output_file))
-        with open(self.output_file, "r") as report:
-            content = report.read()
-            self.assertIn("Nombre total de produits : 3", content)
-            self.assertIn("Valeur totale des stocks : 410.00", content)
 
+        # Lecture et vérification du contenu du fichier PDF
+        with pdfplumber.open(self.output_file) as pdf:
+            page = pdf.pages[0]
+            content = page.extract_text()
+            self.assertIn("Rapport Récapitulatif", content)
+            self.assertIn("Nombre total de produits : 3", content)
+            self.assertIn("Valeur totale des stocks : 450.00", content)
 
 if __name__ == "__main__":
     unittest.main()
