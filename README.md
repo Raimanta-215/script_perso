@@ -14,11 +14,22 @@ Ce projet permet de consolider des fichiers CSV, rechercher des produits, géné
 2. Créez un environnement virtuel: `python -m venv .venv`
 3. Activez l'environnement virtuel: `# Windows : .venv\Scripts\activate # MacOS/Linux source .venv/bin/activate`
 4. Installez les dépendances: `pip install -r requirements.txt`
+5. Lancer l'application : Vous pouvez maintenant exécuter l'application en mode interactif avec la commande suivante : `python main.py`
 
 
 ## Utilisation
+Lorsque l'application démarre en mode interactif, vous pouvez entrer différentes commandes pour gérer les fichiers CSV. Voici quelques exemples de commandes :
 ### Commandes disponibles
- - Consolidation: `python main.py merge --input-dir <répertoire-des-fichiers-csv> --output-file <fichier-consolide.csv>`
- - Recherche: `python main.py search --product-name "Produit A" --category "Catégorie 1" --price-max 20`
- - Gestion des rapports: `python main.py report --input-file <fichier-consolide.csv> --output-file <rapport.pdf>`
-   
+ - Consolidation: `merge --input-dir <path> --output-file <file>`
+   - --input-dir : Dossier contenant les fichiers CSV à consolider.
+   - --output-file : Fichier CSV de sortie consolidé.
+ - Recherche: `search --file <file> --product-name <nom du produit> --category <catégorie> --price-min <prix minimum> --price-max <prix maximum>`
+   - --file : Fichier CSV consolidé dans lequel rechercher.
+   - --product-name : Nom du produit à rechercher (optionnel).
+   - --category : Catégorie du produit à rechercher (optionnel).
+   - --price-min : Prix minimum pour la recherche (optionnel).
+   - --price-max : Prix maximum pour la recherche (optionnel).
+ - Gestion des rapports: `report --input-file <file> --output-file <report_file>`
+   - --input-file : Fichier CSV consolidé pour générer le rapport.
+   - --output-file : Fichier rapport de sortie.
+

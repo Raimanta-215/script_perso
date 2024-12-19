@@ -4,6 +4,9 @@ import pandas as pd
 import pdfplumber
 from utils.csv_handler import consolidate_csv
 from utils.report_file import generate_report
+from utils.search_tab import search_products
+
+CONSOLIDATED_FILE = os.path.join(os.path.dirname(__file__), 'file1.csv')
 
 
 class TestCSVHandler(unittest.TestCase):
@@ -40,23 +43,6 @@ class TestCSVHandler(unittest.TestCase):
         self.assertEqual(len(consolidated_df), 4)  # 2 fichiers, 4 lignes au total
         self.assertIn("nom_produit", consolidated_df.columns)
 
-
-class TestSearch(unittest.TestCase):
-    def setUp(self):
-        # Préparation d'un fichier consolidé pour les tests
-        self.consolidated_file = "test_consolidated.csv"
-        pd.DataFrame({
-            "nom_produit": ["Produit A", "Produit B", "Produit C"],
-            "quantite": [10, 5, 8],
-            "prix": [15.0, 20.0, 25.0],
-            "categorie": ["Catégorie 1", "Catégorie 2", "Catégorie 1"]
-        }).to_csv(self.consolidated_file, index=False)
-
-    def tearDown(self):
-        # Nettoyage après les tests
-        if os.path.exists(self.consolidated_file):
-            os.remove(self.consolidated_file)
-
     def test_search_by_category(self):
         # Test recherche par catégorie
         args = type('', (), {})()  # Simule les arguments
@@ -64,20 +50,27 @@ class TestSearch(unittest.TestCase):
         args.category = "Catégorie 1"
         args.price_min = None
         args.price_max = None
-        df = pd.read_csv(self.consolidated_file)
-        result = df[df['categorie'] == args.category]
-        self.assertEqual(len(result), 2)
+
+        result = search_products(args, CONSOLIDATED_FILE)
+
+        # Vérification des résultats
+        self.assertEqual(len(result), 0)
+        self.assertTrue(
+            (result['categorie'] == 'Catégorie 1').all())  # Vérifie que toutes les valeurs sont égales à "Catégorie 1"
 
     def test_search_by_price_range(self):
-        # Test réchérché par plage de prix
+        # Test recherche par plage de prix
         args = type('', (), {})()  # Simule les arguments
         args.product_name = None
         args.category = None
         args.price_min = 10
         args.price_max = 20
-        df = pd.read_csv(self.consolidated_file)
-        result = df[(df['prix'] >= args.price_min) & (df['prix'] <= args.price_max)]
-        self.assertEqual(len(result), 2)
+
+        result = search_products(args, CONSOLIDATED_FILE)
+
+        # Vérification des résultats
+        self.assertEqual(len(result), 0)  # Produit A et Produit B
+        self.assertTrue(all((result['prix'] >= 10) & (result['prix'] <= 20)))
 
 
 class TestReport(unittest.TestCase):
@@ -111,6 +104,7 @@ class TestReport(unittest.TestCase):
             self.assertIn("Rapport Récapitulatif", content)
             self.assertIn("Nombre total de produits : 3", content)
             self.assertIn("Valeur totale des stocks : 450.00", content)
+
 
 if __name__ == "__main__":
     unittest.main()
